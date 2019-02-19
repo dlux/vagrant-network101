@@ -1,0 +1,6 @@
+language: python
+install:
+  - pip install bashate
+script:
+  - bashate install_dhcp.sh
+  - bashate set_interface.sh
