@@ -5,8 +5,8 @@
 
 # Ensure script is run as root
 if [ "$EUID" -ne "0" ]; then
-   echo  "This script must be run as root."
-   exit 1
+    echo  "This script must be run as root."
+    exit 1
 fi
 
 source /etc/os-release || source /usr/lib/os-release
@@ -30,3 +30,4 @@ fi
 if [[ $ID == 'centos' ]]; then
     echo 'UNDER DEVELOPMENT'
 fi
+

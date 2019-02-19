@@ -12,15 +12,21 @@ Exercise 1
 
 Se levantaran 4 VMs:
 
-* (1) DHCP Server, proveera DHCP para la red privada 192.168.1.0/28.
+* 1 DHCP Server, proveera DHCP para la red privada 192.168.1.0/28.
+
   * Subnet /28 tiene 16 hosts:
+
     * NETWORK ID:    192.168.1.0
+
     * BROADCAST:     192.168.1.15
+
     * NETWORK RANGE: 192.168.1.1 - 192.168.1.14
+
     * DHCP IP:       192.168.1.1
+
     * NETMASK:       255.255.255.240
-* (3) DHCP Clients, se seteara la red privada para estos clientes. La IP
-asignada estara dentro del rango definido en el DHCP
+
+* 3 DHCP Clients, se seteara la red privada para estos clientes. La IP asignada estara dentro del rango definido en el DHCP
  
 .. code-block:: bash
 
