@@ -1,7 +1,7 @@
 # ! /bin/bash
 
 # Uncomment below line to debug
- set -o xtrace
+# set -o xtrace
 
 curl -OL https://github.com/dlux/InstallScripts/raw/master/common_functions
 
