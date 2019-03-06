@@ -11,10 +11,11 @@ fi
 
 source /etc/os-release || source /usr/lib/os-release
 
+nic='enp0s8'
+echo "<--- SET DHCP INTERFACE $nic"
+
 # Process on Ubuntu Xenial Distro
-if [[ $VERSION_CODENAME=='xenial' ]]; then
-    nic='enp0s8'
-    echo "<--- SET INTERFACE $nic TO DHCP"
+if [[ $VERSION_CODENAME == 'xenial' ]]; then
     cat <<EOF >> /etc/network/interfaces.d/50-cloud-init.cfg
 
 auto $nic
@@ -26,11 +27,8 @@ EOF
 
 fi
 
-
 # Process on Ubuntu Bionic Distro
-if [[ $VERSION_CODENAME=='bionic' ]]; then
-    nic='enp0s8'
-    echo "<--- SET FIXED IP ON NIC $nic"
+if [[ $VERSION_CODENAME == 'bionic' ]]; then
     cat <<EOF >> /etc/netplan/50-vagrant.yaml
 ---
 network:
@@ -41,10 +39,5 @@ network:
       dhcp4: yes
 EOF
     netplan apply
-fi
-
-# Process on CentOS Distro
-if [[ $ID == 'centos' ]]; then
-    echo 'UNDER DEVELOPMENT'
 fi
 
