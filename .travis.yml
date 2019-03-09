@@ -4,3 +4,4 @@ install:
 script:
   - bashate install_dhcp.sh
   - bashate set_interface.sh
+  - bashate install_dns.sh
