@@ -22,8 +22,13 @@ Vagrant.configure(2) do |config|
 
     # Tight configuration to a good known box version
     config.vm.box_check_update = false
-    config.vm.box = 'ubuntu/bionic64'
-    config.vm.box_version = '20190212.1.0'
+    config.vm.box = 'bento/centos-7.6'
+    config.vm.box_version = '201812.27.0'
+    interface = 'eth1'
+
+    #interface = 'enp0s8'
+    #config.vm.box = 'ubuntu/bionic64'
+    #config.vm.box_version = '20190212.1.0'
     #config.vm.box = 'ubuntu/xenial64'
     #config.vm.box_version = '20181031.0.0'
 
@@ -35,7 +40,12 @@ Vagrant.configure(2) do |config|
             v.customize ["modifyvm", :id, "--cpus", 1]
         end
         svr.vm.provision 'shell' do |s|
+            s.path = 'set_interface.sh'
+            s.args = [interface, "static"]
+        end
+        svr.vm.provision 'shell' do |s|
             s.path = 'install_dhcp.sh'
+            s.args = [interface]
         end
     end
 
@@ -48,6 +58,9 @@ Vagrant.configure(2) do |config|
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_interface.sh'
+            s.args = [interface, "dhcp"]
+        end
+        svr.vm.provision 'shell' do |s|
             s.path = 'install_dns.sh'
         end
     end
@@ -62,6 +75,7 @@ Vagrant.configure(2) do |config|
             end
             cli.vm.provision 'shell' do |s|
                 s.path = 'set_interface.sh'
+                s.args = [interface, "dhcp"]
             end
         end
     end
