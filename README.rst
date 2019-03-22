@@ -12,7 +12,7 @@ Exercise 1 - DHCP
 
 Bring up 4 VMs:
 
-* 1 DHCP Server, which will provide DHCP services on private network 192.168.1.0/28
+* (1) Server - DHCP - will provide DHCP services on private network 192.168.1.0/28
 
   * Subnet /28 has 16 hosts(14 usable):
 
@@ -26,18 +26,11 @@ Bring up 4 VMs:
 
     * NETMASK:       255.255.255.240
 
-* 3 DHCP Clients servers. The private network on NIC2 will be configured by the DHCP. This means IP address assigned on NIC2 will be within the define DHCP range defined above.
- 
-
-Exercise 2 - Adding DNS
-----------------------------
-
-Using base configuration from Exercise1.
-A new VM is added to serve as the DNS - set to non autostart hence VM must be turn on manually.
-Additionally consider using same DHCP machine to host DNS by running intall_dns script
+* (3) Servers - DHCP Clients. The private network on NIC2 will be configured by the DHCP. This means IP address assigned on NIC2 will be within the define DHCP range defined above.
 
 
 Usage
+~~~~~
 
 .. code-block:: bash
 
@@ -53,6 +46,20 @@ Usage
   # VERIFY DHCP IP ADDRESS ON CLIENT:
   $ vagrant ssh dhcpclient-1
   $ ip a
+
+
+Exercise 2 - Adding DNS
+----------------------------
+
+Using base configuration from Exercise1.
+A new VM is added to serve as the DNS - set to non autostart hence VM must be turn on manually.
+Additionally consider using same DHCP machine to host DNS by running intall_dns script
+
+
+Usage
+~~~~~
+
+.. code-block:: bash
 
   # TO ADD A DNS SERVER
   $ vagrant up dnsserver
