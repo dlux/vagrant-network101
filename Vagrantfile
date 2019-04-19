@@ -65,6 +65,22 @@ Vagrant.configure(2) do |config|
         end
     end
 
+    config.vm.define :natserver, autostart: false do |svr|
+        svr.vm.hostname = 'natserver'
+        svr.vm.network "private_network", ip: "5.5.5.5", auto_config: false
+        svr.vm.provider 'virtualbox' do |v|
+            v.customize ['modifyvm', :id, '--memory', 1024 * 1 ]
+            v.customize ["modifyvm", :id, "--cpus", 1]
+        end
+        svr.vm.provision 'shell' do |s|
+            s.path = 'set_interface.sh'
+            s.args = [interface, "dhcp"]
+        end
+        svr.vm.provision 'shell' do |s|
+            s.path = 'set_nat.sh'
+        end
+    end
+
     # DEFINE 3 CLIENTS TO TEST DHCP - USE PORT 68
     (1..3).each do |i|
         config.vm.define "dhcpclient-#{i}" do |cli|
