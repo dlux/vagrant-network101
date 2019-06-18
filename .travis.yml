@@ -8,3 +8,4 @@ script:
   - bashate set_interface.sh
   - bashate install_dns.sh
   - bashate set_nat.sh
+  - bashate set_pxe_fog.sh
