@@ -11,7 +11,12 @@ source common_functions
 EnsureRoot
 UpdatePackageManager
 
-function configure_server_nat {
+priv_interface="$1"
+## TODO: FIX NEXT LINE
+pub_interface=$(ip a | grep -v $priv_interface | grep -o eth. -m1)
+
+function config_nat_firewalld {
+    WriteLog "Setting up NAT server via firewalld service - DNAT IP forwarding"
     WriteLog "Enable firewalld"
     systemctl start firewalld
 
@@ -20,9 +25,6 @@ function configure_server_nat {
     sysctl -p
 
     WriteLog "Remove private interface from public zone"
-    WriteLog "For this exercise eth1"
-    priv_interface=$(ip a |grep -o eth. |tail -1)
-    pub_interface=$(ip a |grep -o eth. -m1)
     WriteLog "$(firewall-cmd --get-active-zones)"
     firewall-cmd --permanent --zone=public --remove-interface=$priv_interface
 
@@ -50,5 +52,15 @@ function configure_server_nat {
     WriteLog "Make sure public net route is the default"
 }
 
-configure_server_nat
+function config_nat_iptable {
+    WriteLog "Setting up NAT server via iptable rules - DNAT IP forwarding"
+
+    echo '1' > /proc/sys/net/ipv4/ip_forward
+    WriteLog 'Loading iptables module'
+    modprobe ip_tables
+    modprobe ip_conntrack
+    iptables -t nat -A POSTROUTING -o $pub_interface -j MASQUERADE
+}
+
+config_nat_firewalld
 

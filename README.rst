@@ -5,6 +5,8 @@ vagrant-network101
 .. image:: https://travis-ci.com/dlux/vagrant-network101.svg?branch=master
     :target: https://travis-ci.com/dlux/vagrant-network101
 
+**Status: COMPLETE: DHCP**
+
 A project to try out basic Network concepts: DHCP, DNS, PXE, iPXE, HTTP Boot
 
 Exercise 1 - DHCP
@@ -62,6 +64,7 @@ E2 - Usage
 .. code-block:: bash
 
   # TO ADD A DNS SERVER
+  $ vagrant up
   $ vagrant up dnsserver
   # ALSO MIGHT PREFER RUNNING install_dns.sh ON SAME DHCP SERVER VM
 
@@ -79,5 +82,28 @@ E3 - Usage
 .. code-block:: bash
 
   # TO ADD A DNS SERVER
+  $ vagrant up
+  $ vagrant up natserver
+
+Exercise 4 - Adding PXE server
+------------------------------
+
+Using base configuration from Exercise1.
+A new VM is added to serve as the PXE server.
+It is set to non autostart hence VM must be turn on manually.
+PXE server uses fogproject.
+
+Client1 will be use to test PXE server routing traffic via private network.
+
+Status: Incomplete
+TODO: configure dhcp, create base cirros image.
+
+E4 - Usage
+~~~~~~~~~~
+
+.. code-block:: bash
+
+  # TO ADD A PXE SERVER
+  $ vagrant up
   $ vagrant up natserver
 

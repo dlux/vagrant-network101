@@ -22,8 +22,8 @@ Vagrant.configure(2) do |config|
 
     # Tight configuration to a good known box version
     config.vm.box_check_update = false
-    config.vm.box = 'bento/centos-7.6'
-    config.vm.box_version = '201812.27.0'
+    config.vm.box = 'centos/7'
+    #config.vm.box_version = '201812.27.0'
     interface = 'eth1'
 
     #interface = 'enp0s8'
@@ -36,7 +36,7 @@ Vagrant.configure(2) do |config|
         svr.vm.hostname = 'dhcpserver'
         svr.vm.network "private_network", ip: "5.5.5.5", auto_config: false
         svr.vm.provider 'virtualbox' do |v|
-            v.customize ['modifyvm', :id, '--memory', 1024 * 1 ]
+            v.customize ['modifyvm', :id, '--memory', 512 * 1 ]
             v.customize ["modifyvm", :id, "--cpus", 1]
         end
         svr.vm.provision 'shell' do |s|
@@ -53,7 +53,7 @@ Vagrant.configure(2) do |config|
         svr.vm.hostname = 'dnsserver'
         svr.vm.network "private_network", ip: "5.5.5.5", auto_config: false
         svr.vm.provider 'virtualbox' do |v|
-            v.customize ['modifyvm', :id, '--memory', 1024 * 1 ]
+            v.customize ['modifyvm', :id, '--memory', 512 * 1 ]
             v.customize ["modifyvm", :id, "--cpus", 1]
         end
         svr.vm.provision 'shell' do |s|
@@ -69,7 +69,7 @@ Vagrant.configure(2) do |config|
         svr.vm.hostname = 'natserver'
         svr.vm.network "private_network", ip: "5.5.5.5", auto_config: false
         svr.vm.provider 'virtualbox' do |v|
-            v.customize ['modifyvm', :id, '--memory', 1024 * 1 ]
+            v.customize ['modifyvm', :id, '--memory', 512 * 1 ]
             v.customize ["modifyvm", :id, "--cpus", 1]
         end
         svr.vm.provision 'shell' do |s|
@@ -78,6 +78,23 @@ Vagrant.configure(2) do |config|
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_nat.sh'
+            s.args = [interface]
+        end
+    end
+
+    config.vm.define :pxeserver, autostart: false do |svr|
+        svr.vm.hostname = 'pxeserver'
+        svr.vm.network "private_network", ip: "5.5.5.5", auto_config: false
+        svr.vm.provider 'virtualbox' do |v|
+            v.customize ['modifyvm', :id, '--memory', 512 * 1 ]
+            v.customize ["modifyvm", :id, "--cpus", 1]
+        end
+        svr.vm.provision 'shell' do |s|
+            s.path = 'set_interface.sh'
+            s.args = [interface, "dhcp"]
+        end
+        svr.vm.provision 'shell' do |s|
+            s.path = 'set_pxe_fog.sh'
         end
     end
 
