@@ -13,7 +13,7 @@ UpdatePackageManager
 
 priv_interface="$1"
 ## TODO: FIX NEXT LINE
-pub_interface=$(ip a | grep -v $priv_interface | grep -o eth. -m1)
+pub_interface=$(ip route get 8.8.8.8 | awk '{ print $(NF-2); exit}')
 
 function config_nat_firewalld {
     WriteLog "Setting up NAT server via firewalld service - DNAT IP forwarding"
