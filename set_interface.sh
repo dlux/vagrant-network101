@@ -1,7 +1,16 @@
 #!/bin/bash
 
 # Uncomment below interface to debug
-# set -o xtrace
+set -o xtrace
+
+set -e
+
+[[ -z "${1}" ]] && echo 'must provide interface' && exit 1
+
+nic="${1}"
+address="${2}"
+cidr="${3}"
+[[ -z "$address" ]] && mode='dhcp' || mode='static'
 
 if [[ ! -f common_functions ]]; then
     curl -OL https://github.com/dlux/InstallScripts/raw/master/common_functions
@@ -13,26 +22,23 @@ UpdatePackageManager
 
 source /etc/os-release || source /usr/lib/os-release
 
-nic="${1:-enp0s8}"
-mode="${2:-dhcp}"
-address="${3:-192.168.1.1}"
-netmask="${4:-255.255.255.240}"
-cidr="${5:-28}"
-
 echo "<--- SET INTERFACE $nic to MODE $mode"
 
 # Process on Ubuntu Xenial Distro
 if [[ $VERSION_CODENAME == 'xenial' ]]; then
+    # Get netmask mask
+    apt-get install -y ipcalc
+    export $(ipcalc -m ${address}/${cidr})
+
     text="\nauto $nic\niface $nic inet $mode"
     if [[ $mode != 'dhcp' ]]; then
-        text="$text\naddress $address\nnetmask $netmask"
+        text="$text\naddress $address\nnetmask $NETMASK"
     fi
     echo -e "$text" >> /etc/network/interfaces.d/50-cloud-init.cfg
 
     ip addr flush dev $nic
     ifup $nic
     ip a
-
 fi
 
 # Process on Ubuntu Bionic Distro
@@ -50,11 +56,16 @@ fi
 
 # Process on CentOS7
 if [[ $ID == 'centos' && $VERSION_ID == '7' ]]; then
+    # Get network
+    yum install -y initscripts
+    export $(ipcalc -m ${address}/${cidr})
+
     text="DEVICE=$nic\nBOOTPROTO=$mode\nTYPE=Ethernet\nONBOOT=yes"
     if [[ $mode != 'dhcp' ]]; then
-        text="$text\nIPADDR=$address\nNETMASK=$netmask"
+        text="$text\nIPADDR=$address\nNETMASK=$NETMASK"
     fi
-    echo -e "$text" >> /etc/sysconfig/network-scripts/ifcfg-eth1
-    systemctl restart network
+    echo -e "$text" > /etc/sysconfig/network-scripts/ifcfg-eth1
+    ifdown $nic
+    ifup $nic
 fi
 

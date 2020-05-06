@@ -41,7 +41,7 @@ Vagrant.configure(2) do |config|
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_interface.sh'
-            s.args = [interface, "static"]
+            s.args = [interface, '192.168.1.1', '28']
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'install_dhcp.sh'
@@ -58,7 +58,7 @@ Vagrant.configure(2) do |config|
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_interface.sh'
-            s.args = [interface, "dhcp"]
+            s.args = [interface]
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'install_dns.sh'
@@ -74,7 +74,7 @@ Vagrant.configure(2) do |config|
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_interface.sh'
-            s.args = [interface, "dhcp"]
+            s.args = [interface]
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_nat.sh'
@@ -91,7 +91,7 @@ Vagrant.configure(2) do |config|
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_interface.sh'
-            s.args = [interface, "dhcp"]
+            s.args = [interface]
         end
         svr.vm.provision 'shell' do |s|
             s.path = 'set_pxe_fog.sh'
@@ -108,7 +108,7 @@ Vagrant.configure(2) do |config|
             end
             cli.vm.provision 'shell' do |s|
                 s.path = 'set_interface.sh'
-                s.args = [interface, "dhcp"]
+                s.args = [interface]
             end
         end
     end
